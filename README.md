@@ -10,4 +10,5 @@ This is a python implementation of the cellular automaton of John Horton Conway'
 python3 tgol.py
 ```
 
-Then you need to specify the size of an array NxN and one by one cells that starts alive.
+Then you need to specify the size of an array NxN.
+Put 'Y' if is a random board, else, you will need to specify one by one cells that starts alive.
