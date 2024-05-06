@@ -22,6 +22,11 @@ class TheGameOfLife:
     def getNumberOfGens(self):
         return self.gen
 
+    def initState(self):
+        init = TheGameOfLife(self.size)
+        [init.swapState(x,y) for x in range(self.size) for y in range(self.size) if self.G[x][y].getState()]
+        return init
+
     def automaton(self):
         Gnext = [[Cell() for _ in range(self.size)] for _ in range(self.size)]
         for x in range(self.size):
@@ -52,22 +57,36 @@ class TheGameOfLife:
         grid = ""
         for x in range(self.size):
             for y in range(self.size):
-                grid += 'O ' if self.G[x][y].getState() else 'X '
+                grid += 'O ' if self.G[x][y].getState() else '- '
             grid += '\n'
         return grid
 
 if __name__ == "__main__":
     size = int(input("Size: "))
     tgol = TheGameOfLife(size)
-    while True:
-        x,y = [int(i) for i in input("Alive X and Y: ").split()]
-        if x == -1 and y == -1:
-            break
-        tgol.swapState(x,y)
-        print(tgol)
+    random = input("(Y or N) Random State?:")
+    if random[0] == 'Y' or random[0] == 'S':
+        import random
+        num_alives = random.randint(1, size*size)
+        xs = random.choices(range(size), k=num_alives)
+        ys = random.choices(range(size), k=num_alives)
+        for x,y in zip(xs, ys):
+            tgol.swapState(x,y)
+    else:
+        while True:
+            x,y = [int(i) for i in input("Alive X and Y: ").split()]
+            if x == -1 and y == -1:
+                break
+            tgol.swapState(x,y)
+            print(tgol)
 
     while True:
         os.system('clear')
+        if(tgol.getNumberOfGens() == 0):
+            initialState = tgol.initState()
+        else:
+            print(f"Initial State")
+            print(initialState)
         print(f"Gen {tgol.getNumberOfGens()}")
         print(tgol)
         if tgol.automaton():
@@ -75,6 +94,8 @@ if __name__ == "__main__":
         time.sleep(2)
 
     os.system('clear')
+    print(f"Initial State")
+    print(initialState)
     print(f"Final State in Gen {tgol.getNumberOfGens()}")
     print(tgol)
 
